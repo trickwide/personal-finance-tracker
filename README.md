@@ -1,6 +1,8 @@
 # Personal finance tracker
 
-Project repository for University of Helsinki's course Tietokannat ja web-ohjelmointi. This README is a WIP and is subject to change as the project evolves.
+Project repository for University of Helsinki's course Tietokannat ja web-ohjelmointi. 
+
+This README is a WIP and is subject to change as the project evolves.
 
 ## Features
 

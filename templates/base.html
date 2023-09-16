@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}{% endblock %} - Personal finance tracker</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> <!-- new -->
+    </head>
+
+<body>
+<nav>
+    <h1>Personal finance tracker</h1>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="dashboard">Dashboard</a></li>
+        <li><a href="/register">Register</a></li>
+    </ul>
+</nav>
+
+
+{% block content %}{% endblock %}
+</body>
+</html>

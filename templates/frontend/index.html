@@ -1,8 +1,14 @@
-<title>Personal finance tracker</title>
-<h1>Login to your tracker</h1>
-<form action="/dashboard" method="POST">
-  Username: <input type="text" name="username" /><br />
-  Password: <input type="password" name="password" /><br />
-  <input type="submit" value="Login" />
-</form>
-<p>No account? <a href="/register">Register here</a></p>
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Home{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form action="/dashboard" method="POST">
+    Username: <input type="text" name="username" /><br />
+    Password: <input type="password" name="password" /><br />
+    <input type="submit" value="Login" />
+  </form>
+  <p>No account? <a href="/register">Register here</a></p>
+{% endblock %}

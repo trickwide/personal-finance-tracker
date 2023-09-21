@@ -5,7 +5,18 @@
 {% endblock %}
 
 {% block content %}
-    <form action="/" method="POST">
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flashed-messages">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    
+    <form action="/register" method="POST">
         Username: <input type="text" name="username" /><br />
         Password: <input type="password" name="password" /><br />
         Confirm password: <input type="password" name="password_confirm" /><br />

@@ -3,3 +3,15 @@
 {% block header %}
     <h1>{% block title %}Dashboard{% endblock %}</h1>
 {% endblock %}
+
+{% block content %}
+    {% if 'username' not in session %}
+    <p>You are not logged in.</p>
+    <a href="{{ url_for('index') }}">Log in</a> or 
+    <a href="{{ url_for('register') }}">Register</a>
+    {% else %}
+    <p>You are logged in as {{ session["username"] }}.</p>
+    <a href="{{ url_for('logout') }}">Logout</a>
+    {% endif %}
+{% endblock %}
+```

@@ -19,6 +19,16 @@ def is_password_valid(password):
     return has_uppercase and has_number and has_special
 
 
+def validate_user_credentials(username, password):
+    sql = text("SELECT password FROM users WHERE username=:username")
+    result = db.session.execute(sql, {"username": username}).fetchone()
+    if not result:
+        return False
+
+    hashed_password = result[0]
+    return check_password_hash(hashed_password, password)
+
+
 def register_user(username, password):
     # Check if username already exists
     sql = text("SELECT username FROM users WHERE username=:username")

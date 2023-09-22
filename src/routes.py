@@ -2,17 +2,29 @@ from app import app
 from flask import Flask, render_template, redirect, request, flash, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
-from werkzeug.security import generate_password_hash, check_password_hash
+from services.user_service import register_user, is_username_valid, is_password_valid, validate_user_credentials
 from test_db import db
-from services.user_service import register_user, is_username_valid, is_password_valid
 
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def index():
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        valid = validate_user_credentials(username, password)
+
+        if not valid:
+            flash("Invalid username or password")
+            return redirect(url_for('index'))
+
+        session["username"] = username
+        return redirect(url_for('dashboard'))
+
     return render_template("frontend/index.html")
 
 
-@app.route("/dashboard", methods=["POST"])
+@app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
     return render_template("frontend/dashboard.html")
 
@@ -44,3 +56,9 @@ def register():
             return redirect(url_for('register'))
 
     return render_template("frontend/register.html")
+
+
+@app.route("/logout")
+def logout():
+    del session["username"]
+    return redirect(url_for('index'))

@@ -2,9 +2,13 @@ from app import app
 from flask import Flask, render_template, redirect, request, flash, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
-from services.user_service import register_user, is_username_valid, is_password_valid, validate_user_credentials
+from services.user_service import register_user, is_username_valid, is_password_valid, validate_user_credentials, get_user_id_by_username
 from test_db import db
-from services.income_service import insert_income
+from services.income_service import insert_income, get_total_income, get_income_past_week, get_income_past_month, get_income_past_year
+
+
+def check_session():
+    return "username" in session
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -27,6 +31,16 @@ def index():
 
 @app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
+    if check_session():
+        user_id = get_user_id_by_username(session["username"])
+
+        if user_id:
+            total_income = get_total_income(user_id)
+            income_past_week = get_income_past_week(user_id)
+            income_past_month = get_income_past_month(user_id)
+            income_past_year = get_income_past_year(user_id)
+            return render_template("frontend/dashboard.html", total_income=total_income, income_past_week=income_past_week, income_past_month=income_past_month, income_past_year=income_past_year)
+
     return render_template("frontend/dashboard.html")
 
 
@@ -70,12 +84,10 @@ def add_income():
     source = request.form.get("source")
     amount = request.form.get("amount")
 
-    if "username" in session:
-        user = db.session.execute(text("SELECT user_id FROM users WHERE username = :username"), {
-                                  "username": session["username"]}).fetchone()
-
-        if user:
-            insert_income(user.user_id, source, amount)
+    if check_session():
+        user_id = get_user_id_by_username(session["username"])
+        if user_id:
+            insert_income(user_id, source, amount)
             flash("Income added successfully")
             return redirect(url_for('dashboard'))
         else:

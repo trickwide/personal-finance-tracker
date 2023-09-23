@@ -44,3 +44,9 @@ def register_user(username, password):
     db.session.execute(
         sql, {"username": username, "password": hashed_password})
     db.session.commit()
+
+
+def get_user_id_by_username(username):
+    sql = text("SELECT user_id FROM users WHERE username=:username")
+    result = db.session.execute(sql, {"username": username}).fetchone()
+    return result.user_id if result else None

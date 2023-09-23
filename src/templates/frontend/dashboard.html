@@ -23,6 +23,12 @@
 
         <input type="submit" value="Add Income">
     </form>
+    <div>
+        <label>Total Income:</label> {{ total_income }}
+        <label>Income Past Week:</label> {{ income_past_week }}
+        <label>Income Past Month:</label> {{ income_past_month }}
+        <label>Income Past Year:</label> {{ income_past_year }}
+    </div>
 </br>
     <form action="{{ url_for('dashboard') }}" method="post">
         <label for="expense_category">Expense category:</label>

@@ -147,6 +147,9 @@ def add_expense():
             services.expense_service.insert_expense(user_id, category, amount)
             flash("Expense added successfully")
             return redirect(url_for('dashboard'))
+        else:
+            flash("User not found!")
+            return redirect(url_for('index'))
 
     else:
         flash("Please log in to add expense")

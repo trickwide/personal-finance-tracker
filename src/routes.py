@@ -7,6 +7,7 @@ from db import db
 from services.income_service import insert_income, get_total_income, get_income_past_week, get_income_past_month, get_income_past_year
 import services.expense_service
 import services.saving_service
+import services.budget_service
 
 
 def check_session():
@@ -61,7 +62,14 @@ def dashboard():
                 "investment": services.saving_service.get_investment_savings(user_id)
             }
 
-            return render_template("frontend/dashboard.html", income=income_data, expense=expense_data, savings=savings_data)
+            budget_data = {
+                "housing": services.budget_service.get_housing_utilities_budget(user_id),
+                "food": services.budget_service.get_food_transport_budget(user_id),
+                "health": services.budget_service.get_health_personal_budget(user_id),
+                "lifestyle": services.budget_service.get_lifestyle_misc_budget(user_id)
+            }
+
+            return render_template("frontend/dashboard.html", income=income_data, expense=expense_data, savings=savings_data, budget=budget_data)
 
     return render_template("frontend/dashboard.html")
 
@@ -148,4 +156,18 @@ def add_saving():
         if user_id:
             services.saving_service.insert_saving(user_id, category, amount)
             flash("Saving added successfully")
+            return redirect(url_for('dashboard'))
+
+
+@app.route("/add_budget", methods=["POST"])
+def add_budget():
+    category = request.form.get("category")
+    amount = float(request.form.get("amount"))
+
+    if check_session():
+        user_id = get_user_id_by_username(session["username"])
+
+        if user_id:
+            services.budget_service.insert_budget(user_id, category, amount)
+            flash("Budget added successfully")
             return redirect(url_for('dashboard'))

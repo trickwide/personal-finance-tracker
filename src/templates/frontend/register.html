@@ -5,17 +5,6 @@
 {% endblock %}
 
 {% block content %}
-
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul class="flashed-messages">
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
-        </br>
     <small><i>Username should be at least 5 characters long, contain only letters and numbers, and not be entirely numeric.</i></small><br />
     <small><i>Password should be at least 8 characters long.</i></small><br />
         </br>
@@ -25,4 +14,13 @@
         Confirm password: <input type="password" name="password_confirm" /><br />
         <input type="submit" value="Register" />
     </form>
+
+    {% set js_flashed_messages = get_flashed_messages()|tojson %}
+    <script>
+        let flashedMessages = {{ js_flashed_messages|safe }};
+        flashedMessages.forEach(function(message) {
+            alert(message);
+        });
+    </script>
+
 {% endblock %}

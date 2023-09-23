@@ -2,12 +2,13 @@ from app import app
 from flask import Flask, render_template, redirect, request, flash, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
-from services.user_service import register_user, is_username_valid, is_password_valid, validate_user_credentials, get_user_id_by_username
 from db import db
+from services.user_service import register_user, is_username_valid, is_password_valid, validate_user_credentials, get_user_id_by_username
 from services.income_service import insert_income, get_total_income, get_income_past_week, get_income_past_month, get_income_past_year
 import services.expense_service
 import services.saving_service
 import services.budget_service
+import services.goal_service
 
 
 def check_session():
@@ -69,7 +70,10 @@ def dashboard():
                 "lifestyle": services.budget_service.get_lifestyle_misc_budget(user_id)
             }
 
-            return render_template("frontend/dashboard.html", income=income_data, expense=expense_data, savings=savings_data, budget=budget_data)
+            financial_goals = services.goal_service.get_all_goals_for_user(
+                user_id)
+
+            return render_template("frontend/dashboard.html", income=income_data, expense=expense_data, savings=savings_data, budget=budget_data, goals=financial_goals)
 
     return render_template("frontend/dashboard.html")
 
@@ -114,7 +118,7 @@ def logout():
 @app.route("/add_income", methods=["POST"])
 def add_income():
     source = request.form.get("source")
-    amount = request.form.get("amount")
+    amount = float(request.form.get("amount"))
 
     if check_session():
         user_id = get_user_id_by_username(session["username"])
@@ -144,6 +148,10 @@ def add_expense():
             flash("Expense added successfully")
             return redirect(url_for('dashboard'))
 
+    else:
+        flash("Please log in to add expense")
+        return redirect(url_for('index'))
+
 
 @app.route("/add_saving", methods=["POST"])
 def add_saving():
@@ -158,6 +166,10 @@ def add_saving():
             flash("Saving added successfully")
             return redirect(url_for('dashboard'))
 
+    else:
+        flash("Please log in to add saving")
+        return redirect(url_for('index'))
+
 
 @app.route("/add_budget", methods=["POST"])
 def add_budget():
@@ -171,3 +183,28 @@ def add_budget():
             services.budget_service.insert_budget(user_id, category, amount)
             flash("Budget added successfully")
             return redirect(url_for('dashboard'))
+
+    else:
+        flash("Please log in to add budget")
+        return redirect(url_for('index'))
+
+
+@app.route("/add_goal", methods=["POST"])
+def add_goal():
+    goal_name = request.form.get("name")
+    category = request.form.get("category")
+    goal_amount = float(request.form.get("amount"))
+    target_date = request.form.get("date")
+
+    if check_session():
+        user_id = get_user_id_by_username(session["username"])
+
+        if user_id:
+            services.goal_service.insert_goal(
+                user_id, goal_name, category, goal_amount, target_date)
+            flash("Financial goal added successfully")
+            return redirect(url_for('dashboard'))
+
+    else:
+        flash("Please log in to add financial goal")
+        return redirect(url_for('index'))

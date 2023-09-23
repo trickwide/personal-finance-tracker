@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 
+{% block stylesheets %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+{% endblock %}
+
 {% block header %}
     <h1>{% block title %}Dashboard{% endblock %}</h1>
 {% endblock %}
@@ -26,8 +31,11 @@
 </br>
     <div>
         <label>Total Income:</label> {{ income.total }}
+    </br>
         <label>Income Past Week:</label> {{ income.week }}
+    </br>
         <label>Income Past Month:</label> {{ income.month }}
+    </br>
         <label>Income Past Year:</label> {{ income.year }}
     </div>
 </br>
@@ -48,8 +56,11 @@
 </br>
     <div>
         <label>Total Expenses:</label> {{ expense.total }}
+    </br>
         <label>Expenses Past Week:</label> {{ expense.week }}
+    </br>
         <label>Expenses Past Month:</label> {{ expense.month }}
+    </br>
         <label>Expenses Past Year:</label> {{ expense.year }}
     </div>
 </br>
@@ -89,26 +100,76 @@
     </br>
     <div>
         <label>Housing & Utilities Budget Left:</label> {{ budget.housing }}
+    </br>
         <label>Food & Transportation Budget Left:</label> {{ budget.food }}
+    </br>
         <label>Health & Personal Care Budget Left:</label> {{ budget.health }}
+    </br>
         <label>Lifestyle & Miscellaneous Budget Left:</label> {{ budget.lifestyle }}
     </div>
 </br>
 
-    <form action="{{ url_for('dashboard') }}" method="post">
+    <form action="{{ url_for('add_goal') }}" method="post">
         <label for="goal_name">Goal Name:</label>
         <input type="text" id="goal_name "name="name" required>
-    </br>
+
+        <label for="goal_category">Category:</label>
+        <select id="goal_category" name="category" required>
+            <option value="emergency">Emergency</option>
+            <option value="retirement">Retirement</option>
+            <option value="investment">Investment</option>
+        </select>
+
+
         <label for="goal_amount">Goal Amount:</label>
         <input type="number" id="goal_amount" name="amount" step="0.01" required>
-    </br>
-        <label for="current_amount">Current Amount:</label>
-        <input type="number" id="current_amount" name="amount" step="0.01" required>
-    </br>
+  
     <label for="target_date">Target Date:</label>
     <input type="date" id="target_date" name="date" required>
-    </br>
         <input type="submit" value="Add Goal">
     </form>
+
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Goal Name</th>
+                    <th>Category</th>
+                    <th>Goal Amount</th>
+                    <th>Current Amount</th>
+                    <th>Target Date</th>
+                    <th>Progress</th>
+                </tr>
+            </thead>
+                {% for goal in goals %}
+                <tr>
+                    <td>{{ goal.goal_name }}</td>
+                    <td>{{ goal.category }}</td>
+                    <td>{{ goal.goal_amount }}</td>
+                    <td>{{ goal.current_amount }}</td>
+                    <td>{{ goal.target_date.strftime('%d-%m-%Y') }}</td>
+                    <td>
+                        <div class="progress-bar">
+                            {% set progress_percent = (goal.current_amount / goal.goal_amount) * 100 %}
+                            {% if progress_percent > 100 %}
+                               {% set progress_percent = 100 %}
+                            {% endif %}
+                            <div class="progress-bar-fill" style="width: {{ progress_percent }}%"></div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+                    
+            </tbody>
+        </table>
+    </div>
+    
+    {% set js_flashed_messages = get_flashed_messages()|tojson %}
+    <script>
+        let flashedMessages = {{ js_flashed_messages|safe }};
+        flashedMessages.forEach(function(message) {
+            alert(message);
+        });
+    </script>
     {% endif %}
 {% endblock %}

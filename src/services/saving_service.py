@@ -1,6 +1,5 @@
 from sqlalchemy.sql import text
 from db import db
-from datetime import datetime, timedelta
 
 
 def insert_saving(user_id, category, amount):

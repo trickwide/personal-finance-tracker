@@ -23,11 +23,12 @@
 
         <input type="submit" value="Add Income">
     </form>
+</br>
     <div>
-        <label>Total Income:</label> {{ total_income }}
-        <label>Income Past Week:</label> {{ income_past_week }}
-        <label>Income Past Month:</label> {{ income_past_month }}
-        <label>Income Past Year:</label> {{ income_past_year }}
+        <label>Total Income:</label> {{ income.total }}
+        <label>Income Past Week:</label> {{ income.week }}
+        <label>Income Past Month:</label> {{ income.month }}
+        <label>Income Past Year:</label> {{ income.year }}
     </div>
 </br>
     <form action="{{ url_for('add_expense') }}" method="post">
@@ -44,14 +45,15 @@
 
         <input type="submit" value="Add Expense">
     </form>
+</br>
     <div>
-        <label>Total Expenses:</label> {{ total_expense }}
-        <label>Expenses Past Week:</label> {{ expense_past_week }}
-        <label>Expenses Past Month:</label> {{ expense_past_month }}
-        <label>Expenses Past Year:</label> {{ expense_past_year }}
+        <label>Total Expenses:</label> {{ expense.total }}
+        <label>Expenses Past Week:</label> {{ expense.week }}
+        <label>Expenses Past Month:</label> {{ expense.month }}
+        <label>Expenses Past Year:</label> {{ expense.year }}
     </div>
 </br>
-    <form action="{{ url_for('dashboard') }}" method="post">
+    <form action="{{ url_for('add_saving') }}" method="post">
         <label for="savings_category">Savings category:</label>
         <select id="savings_category" name="category" required>
             <option value="emergency">Emergency Fund</option>
@@ -64,6 +66,13 @@
 
         <input type="submit" value="Add Savings">
     </form>
+</br>
+    <div>
+        <label>Total Savings:</label> {{ savings.total }}
+        <label>Savings Past Week:</label> {{ savings.emergency }}
+        <label>Savings Past Month:</label> {{ savings.retirement }}
+        <label>Savings Past Year:</label> {{ savings.investment}}
+    </div>
 </br>
     <form action="{{ url_for('dashboard') }}" method="post">
         <label for="budgets_category">Budgets category:</label>

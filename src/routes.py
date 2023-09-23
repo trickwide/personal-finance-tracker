@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from services.user_service import register_user, is_username_valid, is_password_valid, validate_user_credentials
 from test_db import db
+from services.income_service import insert_income
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -62,3 +63,25 @@ def register():
 def logout():
     del session["username"]
     return redirect(url_for('index'))
+
+
+@app.route("/add_income", methods=["POST"])
+def add_income():
+    source = request.form.get("source")
+    amount = request.form.get("amount")
+
+    if "username" in session:
+        user = db.session.execute(text("SELECT user_id FROM users WHERE username = :username"), {
+                                  "username": session["username"]}).fetchone()
+
+        if user:
+            insert_income(user.user_id, source, amount)
+            flash("Income added successfully")
+            return redirect(url_for('dashboard'))
+        else:
+            flash("User not found!")
+            return redirect(url_for('index'))
+
+    else:
+        flash("Please log in to add income")
+        return redirect(url_for('index'))

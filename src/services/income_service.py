@@ -20,7 +20,7 @@ def get_total_income(user_id):
     result = db.session.execute(
         sql, {"user_id": user_id}).fetchone()
 
-    return result[0]
+    return result[0] or 0.0
 
 
 def get_income_past_week(user_id):
@@ -33,7 +33,7 @@ def get_income_past_week(user_id):
     result = db.session.execute(
         sql, {"user_id": user_id, "one_week_ago": one_week_ago}).fetchone()
 
-    return result[0]
+    return result[0] or 0.0
 
 
 def get_income_past_month(user_id):
@@ -46,7 +46,7 @@ def get_income_past_month(user_id):
     result = db.session.execute(
         sql, {"user_id": user_id, "one_month_ago": one_month_ago}).fetchone()
 
-    return result[0]
+    return result[0] or 0.0
 
 
 def get_income_past_year(user_id):
@@ -59,4 +59,4 @@ def get_income_past_year(user_id):
     result = db.session.execute(
         sql, {"user_id": user_id, "one_year_ago": one_year_ago}).fetchone()
 
-    return result[0]
+    return result[0] or 0.0

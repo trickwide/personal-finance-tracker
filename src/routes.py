@@ -56,11 +56,14 @@ def register():
             flash("Passwords do not match")
             return redirect(url_for('register'))
 
-        if not is_username_valid(username):
-            flash("Username is too short. Minimum length is 5 characters")
+        username_valid, username_error = is_username_valid(username)
+        if not username_valid:
+            flash(username_error)
             return redirect(url_for('register'))
-        if not is_password_valid(password):
-            flash("Password is too weak. It must be at least 8 characters long and contain an uppercase letter, a number and a special character")
+
+        password_valid, password_error = is_password_valid(password)
+        if not password_valid:
+            flash(password_error)
             return redirect(url_for('register'))
 
         try:

@@ -5,18 +5,32 @@ import re
 
 
 def is_username_valid(username):
-    return len(username) >= 5
+    if len(username) < 5:
+        return False, "Username is too short. Minimum length is 5 characters"
+
+    if not re.match("^[a-zA-Z0-9_]*$", username):
+        return False, "Username can only contain letters, numbers and underscores"
+
+    if username.isdigit():
+        return False, "Username cannot be a number"
+
+    return True, None
 
 
 def is_password_valid(password):
     if len(password) < 8:
-        return False
+        return False, "Password must be at least 8 characters long."
 
-    has_uppercase = any(c.isupper() for c in password)
-    has_number = any(c.isdigit() for c in password)
-    has_special = bool(re.search(r"[!@#$%^&*(),.?\":{}|<>]", password))
+    if not any(c.isupper() for c in password):
+        return False, "Password must contain at least one uppercase letter."
 
-    return has_uppercase and has_number and has_special
+    if not any(c.isdigit() for c in password):
+        return False, "Password must contain at least one number."
+
+    if not bool(re.search(r"[!@#$%^&*(),.?\":{}|<>]", password)):
+        return False, "Password must contain at least one special character (e.g., !@#$%^&*)."
+
+    return True, None
 
 
 def validate_user_credentials(username, password):

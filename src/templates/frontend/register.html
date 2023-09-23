@@ -15,7 +15,10 @@
             </ul>
         {% endif %}
     {% endwith %}
-    
+        </br>
+    <small><i>Username should be at least 5 characters long, contain only letters and numbers, and not be entirely numeric.</i></small><br />
+    <small><i>Password should be at least 8 characters long.</i></small><br />
+        </br>
     <form action="/register" method="POST">
         Username: <input type="text" name="username" /><br />
         Password: <input type="password" name="password" /><br />

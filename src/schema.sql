@@ -33,8 +33,7 @@ CREATE TABLE budgets (
     budget_id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(user_id),
     category VARCHAR(255) NOT NULL,
-    monthly_budget DECIMAL(10,2) NOT NULL,
-    annual_budget DECIMAL(10,2) NOT NULL
+    amount DECIMAL(10,2) NOT NULL
 );
 
 CREATE TABLE financial_goals (

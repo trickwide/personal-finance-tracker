@@ -12,8 +12,9 @@
     {% else %}
     <p>You are logged in as {{ session["username"] }}.</p>
     <a href="{{ url_for('logout') }}">Logout</a>
-
-    <form action="{{ url_for('dashboard') }}" method="post">
+</br>
+</br>
+    <form action="{{ url_for('add_income') }}" method="post">
         <label for="source">Income Source:</label>
         <input type="text" name="source" required>
 
@@ -88,4 +89,3 @@
     </form>
     {% endif %}
 {% endblock %}
-```

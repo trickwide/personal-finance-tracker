@@ -39,9 +39,9 @@ CREATE TABLE budgets (
 CREATE TABLE financial_goals (
     goal_id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(user_id),
-    goal_name VARCHAR(255) NOT NULL,
+    goal_name VARCHAR(255) NOT NULL UNIQUE,
+    category VARCHAR(255) NOT NULL,
     goal_amount DECIMAL(10,2) NOT NULL,
-    current_amount DECIMAL(10,2) NOT NULL,
     target_date TIMESTAMP NOT NULL,
     date_created TIMESTAMP NOT NULL DEFAULT NOW()
 );

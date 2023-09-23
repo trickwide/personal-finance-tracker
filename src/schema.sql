@@ -24,6 +24,7 @@ CREATE TABLE expenses (
 CREATE TABLE savings (
     saving_id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(user_id),
+    category VARCHAR(255) NOT NULL,
     amount DECIMAL(10,2) NOT NULL,
     date_saved TIMESTAMP NOT NULL DEFAULT NOW()
 );

@@ -1,5 +1,5 @@
 from sqlalchemy.sql import text
-from test_db import db
+from db import db
 from datetime import datetime, timedelta
 
 

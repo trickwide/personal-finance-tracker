@@ -3,7 +3,7 @@ from flask import Flask, render_template, redirect, request, flash, session, url
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from services.user_service import register_user, is_username_valid, is_password_valid, validate_user_credentials, get_user_id_by_username
-from test_db import db
+from db import db
 from services.income_service import insert_income, get_total_income, get_income_past_week, get_income_past_month, get_income_past_year
 
 

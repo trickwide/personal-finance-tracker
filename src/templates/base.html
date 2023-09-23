@@ -3,7 +3,8 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}{% endblock %} - Personal finance tracker</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> <!-- new -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        {% block stylesheets %}{% endblock %}
     </head>
 
 <body>

@@ -39,3 +39,13 @@ def insert_goal(user_id, goal_name, category, goal_amount, target_date):
                        "goal_amount": goal_amount, "target_date": target_date})
 
     db.session.commit()
+
+
+def is_goal_name_unique(user_id, goal_name):
+    sql = text(
+        "SELECT 1 FROM financial_goals WHERE user_id = :user_id AND goal_name = :goal_name LIMIT 1")
+
+    result = db.session.execute(
+        sql, {"user_id": user_id, "goal_name": goal_name}).fetchone()
+
+    return result is None

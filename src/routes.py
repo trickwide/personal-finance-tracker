@@ -101,6 +101,7 @@ def register():
 
         try:
             register_user(username, password)
+            flash("Registration successful")
             return redirect(url_for('index'))
         except ValueError as error:
             flash(str(error))
@@ -203,6 +204,11 @@ def add_goal():
         user_id = get_user_id_by_username(session["username"])
 
         if user_id:
+
+            if not services.goal_service.is_goal_name_unique(user_id, goal_name):
+                flash("Goal name already exists. Please choose an unique name.")
+                return redirect(url_for('dashboard'))
+
             services.goal_service.insert_goal(
                 user_id, goal_name, category, goal_amount, target_date)
             flash("Financial goal added successfully")

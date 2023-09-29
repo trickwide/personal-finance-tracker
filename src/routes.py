@@ -17,6 +17,11 @@ def check_session():
 
 @app.route("/", methods=["GET", "POST"])
 def index():
+    if check_session():
+        flash(
+            "You are already logged in. Please log out, if you wish to log in with a different account.")
+        return redirect(url_for('dashboard'))
+
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
@@ -80,6 +85,10 @@ def dashboard():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    if check_session():
+        flash("You are already logged in. Please log out to create a new account.")
+        return redirect(url_for('dashboard'))
+
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")

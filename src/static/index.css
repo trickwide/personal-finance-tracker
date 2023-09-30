@@ -1,0 +1,50 @@
+.centered-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-wrapper {
+  display: flex;
+  justify-content: center; /* Changed to center for login form */
+  align-items: start;
+  width: 80%;
+  max-width: 500px; /* Adjusted for a shorter login form */
+  background-color: #fff;
+  padding: 1em;
+  border: 1px solid #ccc;
+  border-radius: 1em;
+}
+
+.login-form form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 0.5em;
+  align-items: center;
+}
+
+.input-group {
+  display: contents;
+}
+
+.input-group label {
+  grid-column: 1;
+}
+
+.input-group input {
+  grid-column: 2;
+}
+
+#login-button {
+  grid-column: 2;
+  width: auto;
+  justify-self: start;
+}
+
+.account-prompt {
+  text-align: center;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em; /* Add a bit of space between the prompt and the login button */
+  grid-column: span 2; /* Span the prompt across both columns */
+}

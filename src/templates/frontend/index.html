@@ -1,18 +1,33 @@
 {% extends 'base.html' %}
 
+{% block stylesheets %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+{% endblock %}
+
 {% block header %}
   <h1>{% block title %}Home{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-  </br>
-
-  <form action="/" method="POST">
-    Username: <input type="text" name="username" /><br />
-    Password: <input type="password" name="password" /><br />
-    <input type="submit" value="Login" />
-  </form>
-  <p>No account? <a href="/register">Register here</a></p>
+  <div class="centered-container">
+    <div class="login-wrapper">
+      <div class="login-form">
+        <form action="/" method="POST">
+          <div class="input-group">
+            <label for="login-username">Username:</label>
+            <input type="text" id="login-username" name="username" />
+          </div>
+          <div class="input-group">
+              <label for="login-password">Password:</label>
+              <input type="password" id="login-password" name="password" />
+          </div>
+          <input id="login-button" type="submit" value="Login" />
+        </form>
+        <p class="account-prompt">No account? <a href="/register">Register here</a></p>
+      </div>
+    </div>
+  </div>
 
   {% set js_flashed_messages = get_flashed_messages()|tojson %}
     <script>

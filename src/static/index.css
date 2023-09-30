@@ -7,10 +7,10 @@
 
 .login-wrapper {
   display: flex;
-  justify-content: center; /* Changed to center for login form */
+  justify-content: center;
   align-items: start;
   width: 80%;
-  max-width: 500px; /* Adjusted for a shorter login form */
+  max-width: 500px;
   background-color: #fff;
   padding: 1em;
   border: 1px solid #ccc;
@@ -45,6 +45,6 @@
 .account-prompt {
   text-align: center;
   margin-top: 0.5em;
-  margin-bottom: 0.5em; /* Add a bit of space between the prompt and the login button */
-  grid-column: span 2; /* Span the prompt across both columns */
+  margin-bottom: 0.5em;
+  grid-column: span 2;
 }

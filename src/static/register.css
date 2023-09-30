@@ -1,0 +1,49 @@
+.centered-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.registration-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  width: 80%;
+  max-width: 800px;
+  background-color: #fff;
+  padding: 1em;
+  border: 1px solid #ccc;
+  border-radius: 1em;
+}
+
+.requirements-list {
+  list-style-type: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.registration-form form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 0.5em;
+  align-items: center;
+}
+
+.input-group {
+  display: contents;
+}
+
+.input-group label {
+  grid-column: 1;
+}
+
+.input-group input {
+  grid-column: 2;
+}
+
+#register-button {
+  grid-column: 2;
+  width: auto;
+  justify-self: start;
+}

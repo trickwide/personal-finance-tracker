@@ -1,19 +1,56 @@
 {% extends 'base.html' %}
 
+{% block stylesheets %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='register.css') }}">
+{% endblock %}
+
 {% block header %}
     <h1>{% block title %}Register{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-    <small><i>Username should be at least 5 characters long, contain only letters and numbers, and not be entirely numeric.</i></small><br />
-    <small><i>Password should be at least 8 characters long.</i></small><br />
-        </br>
-    <form action="/register" method="POST">
-        Username: <input type="text" name="username" /><br />
-        Password: <input type="password" name="password" /><br />
-        Confirm password: <input type="password" name="password_confirm" /><br />
-        <input type="submit" value="Register" />
-    </form>
+
+<div class="centered-container">
+
+    <div class="registration-wrapper">
+
+        <div class="requirements">
+            <small><i>Username requirements:</i></small><br />
+            <ul class="requirements-list">
+                <li><small><i>- At least 5 characters long.</i></small></li>
+                <li><small><i>- Contain only letters and numbers.</i></small></li>
+                <li><small><i>- Not be entirely numeric.</i></small></li>
+            </ul>
+            <small><i>Password requirements:</i></small><br />
+            <ul class="requirements-list">
+                <li><small><i>- At least 8 characters in length.</i></small></li>
+                <li><small><i>- Contain at least one uppercase letter.</i></small></li>
+                <li><small><i>- Include at least one number.</i></small></li>
+                <li><small><i>- Have at least one special character.</i></small></li>
+            </ul>
+        </div>
+
+        <div class="registration-form">
+            <form action="/register" method="POST">
+                <div class="input-group"">
+                    <label for="username">Username:</label>
+                    <input type="text" name="username" />
+                </div>
+                <div class="input-group"">
+                    <label for="password">Password:</label>
+                    <input type="password" name="password" />
+                </div>
+                <div class="input-group"">
+                    <label for="password_confirm">Confirm password:</label>
+                    <input type="password" name="password_confirm" />
+                </div>
+                <input id="register-button" type="submit" value="Register" />
+            </form>
+        </div>
+    </div>
+</div>
+
 
     {% set js_flashed_messages = get_flashed_messages()|tojson %}
     <script>

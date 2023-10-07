@@ -38,6 +38,16 @@
     </br>
         <label>Income Past Year:</label> {{ income.year }}
     </div>
+    </br>
+    <div>
+        <form method="POST" action="{{ url_for('delete_all_income') }}" onsubmit="return confirm('Are you sure you want to delete all income transactions? This action cannot be undone.');">
+            <button type="submit" class="btn btn-danger">Delete All Income Transactions</button>
+        </form>
+    
+        <form method="POST" action="{{ url_for('delete_last_income') }}" onsubmit="return confirm('Are you sure you want to delete the last income transaction? This action cannot be undone.');">
+            <button type="submit" class="btn btn-warning">Delete Last Income Transaction</button>
+        </form>
+    </div>
 </br>
     <form action="{{ url_for('add_expense') }}" method="post">
         <label for="expense_category">Expense category:</label>

@@ -199,6 +199,39 @@ def add_expense():
         return redirect(url_for('index'))
 
 
+@app.route("/delete_last_expense", methods=["POST"])
+def delete_last_expense():
+    if check_session():
+        user_id = get_user_id_by_username(session["username"])
+        if user_id:
+            services.expense_service.delete_last_expense(user_id)
+            flash("Last expense transaction deleted successfully")
+            return redirect(url_for('dashboard'))
+        else:
+            flash("User not found!")
+            return redirect(url_for('index'))
+
+    else:
+        flash("Please log in to delete expense transactions")
+        return redirect(url_for('index'))
+    
+@app.route("/delete_all_expense", methods=["POST"])
+def delete_all_expenses():
+    if check_session():
+        user_id = get_user_id_by_username(session["username"])
+        if user_id:
+            services.expense_service.delete_all_expenses(user_id)
+            flash("All expense transactions deleted successfully")
+            return redirect(url_for('dashboard'))
+        else:
+            flash("User not found!")
+            return redirect(url_for('index'))
+
+    else:
+        flash("Please log in to delete expense transactions")
+        return redirect(url_for('index'))
+
+
 @app.route("/add_saving", methods=["POST"])
 def add_saving():
     category = request.form.get("category")

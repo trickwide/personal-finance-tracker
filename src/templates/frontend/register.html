@@ -44,6 +44,7 @@
                 <div class="input-group"">
                     <label for="password_confirm">Confirm password:</label>
                     <input type="password" name="password_confirm" />
+                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                 </div>
                 <input id="register-button" type="submit" value="Register" />
             </form>

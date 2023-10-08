@@ -25,6 +25,7 @@
 
         <label for="income_amount">Amount:</label>
         <input type="number" id="income_amount" name="amount" step="0.01" required>
+        <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
 
         <input type="submit" value="Add Income">
     </form>
@@ -42,12 +43,14 @@
     <div class="button-group">
         <div class="form-wrapper">
             <form method="POST" action="{{ url_for('delete_all_income') }}" onsubmit="return confirm('Are you sure you want to delete all income transactions? This action cannot be undone.');">
+                <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
                 <button type="submit">Delete All Income Transactions</button>
             </form>
         </div>
 
         <div class="form-wrapper">
             <form method="POST" action="{{ url_for('delete_last_income') }}" onsubmit="return confirm('Are you sure you want to delete the last income transaction? This action cannot be undone.');">
+                <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
                 <button type="submit">Delete Last Income Transaction</button>
             </form>
         </div>
@@ -64,6 +67,7 @@
 
         <label for="expense_amount">Amount:</label>
         <input type="number" id="expense_amount" name="amount" step="0.01" required>
+        <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
 
         <input type="submit" value="Add Expense">
     </form>
@@ -81,12 +85,14 @@
     <div class="button-group">
         <div class="form-wrapper">
             <form method="POST" action="{{ url_for('delete_all_expenses') }}" onsubmit="return confirm('Are you sure you want to delete all expense transactions? This action cannot be undone.');">
+                <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
                 <button type="submit">Delete All Expense Transactions</button>
             </form>
         </div>
 
         <div class="form-wrapper">
             <form method="POST" action="{{ url_for('delete_last_expense') }}" onsubmit="return confirm('Are you sure you want to delete the last expense transaction? This action cannot be undone.');">
+                <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
                 <button type="submit">Delete Last Expense Transaction</button>
             </form>
         </div>
@@ -102,6 +108,7 @@
 
         <label for="savings_amount">Amount:</label>
         <input type="number" id="savings_amount" name="amount" step="0.01" required>
+        <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
 
         <input type="submit" value="Add Savings">
     </form>
@@ -119,12 +126,14 @@
     <div class="button-group">
         <div class="form-wrapper">
             <form method="POST" action="{{ url_for('delete_all_savings') }}" onsubmit="return confirm('Are you sure you want to delete all savings transactions? This action cannot be undone.');">
+                <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
                 <button type="submit">Delete All Savings Transactions</button>
             </form>
         </div>
 
         <div class="form-wrapper">
             <form method="POST" action="{{ url_for('delete_last_saving') }}" onsubmit="return confirm('Are you sure you want to delete the last savings transaction? This action cannot be undone.');">
+                <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
                 <button type="submit">Delete Last Savings Transaction</button>
             </form>
         </div>
@@ -140,6 +149,7 @@
         </select>
         <label for="budgets_amount">Amount:</label>
         <input type="number" id="budgets_amount" name="amount" step="0.01" required>
+        <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
         <input type="submit" value="Add Budget">
     </form>
     </br>
@@ -156,12 +166,14 @@
     <div class="button-group">
         <div class="form-wrapper">
             <form method="POST" action="{{ url_for('delete_all_budgets') }}" onsubmit="return confirm('Are you sure you want to delete all budgets? This action cannot be undone.');">
+                <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
                 <button type="submit">Delete All Budgets</button>
             </form>
         </div>
 
         <div class="form-wrapper">
             <form method="POST" action="{{ url_for('delete_last_budget') }}" onsubmit="return confirm('Are you sure you want to delete the last budget? This action cannot be undone.');">
+                <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
                 <button type="submit">Delete Last Budget</button>
             </form>
         </div>
@@ -179,12 +191,12 @@
             <option value="investment">Investment</option>
         </select>
 
-
         <label for="goal_amount">Goal Amount:</label>
         <input type="number" id="goal_amount" name="amount" step="0.01" required>
   
-    <label for="target_date">Target Date:</label>
-    <input type="date" id="target_date" name="date" required>
+        <label for="target_date">Target Date:</label>
+        <input type="date" id="target_date" name="date" required>
+        <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
         <input type="submit" value="Add Goal">
     </form>
 
@@ -225,12 +237,14 @@
         <div class="button-group">
             <div class="form-wrapper">
                 <form method="POST" action="{{ url_for('delete_all_goals') }}" onsubmit="return confirm('Are you sure you want to delete all goals? This action cannot be undone.');">
+                    <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
                     <button type="submit">Delete All Goals</button>
                 </form>
             </div>
 
             <div class="form-wrapper">
                 <form method="POST" action="{{ url_for('delete_last_goal') }}" onsubmit="return confirm('Are you sure you want to delete the last goal? This action cannot be undone.');">
+                    <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
                     <button type="submit">Delete Last Goal</button>
                 </form>
             </div>
@@ -239,6 +253,7 @@
                 <form method="POST" action="{{ url_for('delete_goal_by_name') }}" onsubmit="return confirm('Are you sure you want to delete the goal? This action cannot be undone.');">
                     <label for="goal_name">Delete by goal name:</label>
                     <input type="text" id="goal_name "name="name" required>
+                    <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
                     <button type="submit">Delete Goal</button>
                 </form>
             </div>

@@ -16,11 +16,12 @@
         <form action="/" method="POST">
           <div class="input-group">
             <label for="login-username">Username:</label>
-            <input type="text" id="login-username" name="username" />
+            <input type="text" id="login-username" name="username"/>
           </div>
           <div class="input-group">
               <label for="login-password">Password:</label>
               <input type="password" id="login-password" name="password" />
+              <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
           </div>
           <input id="login-button" type="submit" value="Login" />
         </form>

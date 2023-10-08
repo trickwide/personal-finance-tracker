@@ -2,8 +2,9 @@ from app import app
 from flask import Flask, render_template, redirect, request, flash, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
+import secrets
 from db import db
-from services.user_service import register_user, is_username_valid, is_password_valid, validate_user_credentials, get_user_id_by_username
+import services.user_service
 import services.income_service
 import services.expense_service
 import services.saving_service
@@ -14,6 +15,9 @@ import services.goal_service
 def check_session():
     return "username" in session
 
+def validate_csrf_token(request_token):
+    return request_token == session["csrf_token"]
+
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -23,16 +27,21 @@ def index():
         return redirect(url_for('dashboard'))
 
     if request.method == "POST":
+        if not validate_csrf_token(request.form.get("csrf_token")):
+            flash("Invalid CSRF token")
+            return redirect(url_for('index'))
+        
         username = request.form.get("username")
         password = request.form.get("password")
 
-        valid = validate_user_credentials(username, password)
+        valid = services.user_service.validate_user_credentials(username, password)
 
         if not valid:
             flash("Invalid username or password")
             return redirect(url_for('index'))
 
         session["username"] = username
+        session["csrf_token"] = secrets.token_hex(16)
         return redirect(url_for('dashboard'))
 
     return render_template("frontend/index.html")
@@ -41,7 +50,7 @@ def index():
 @app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
     if check_session():
-        user_id = get_user_id_by_username(session["username"])
+        user_id = services.user_service.get_user_id_by_username(session["username"])
 
         if user_id:
             income_data = {
@@ -90,6 +99,10 @@ def register():
         return redirect(url_for('dashboard'))
 
     if request.method == "POST":
+        if not validate_csrf_token(request.form.get("csrf_token")):
+            flash("Invalid CSRF token")
+            return redirect(url_for('register'))
+            
         username = request.form.get("username")
         password = request.form.get("password")
         password_confirm = request.form.get("password_confirm")
@@ -98,22 +111,23 @@ def register():
             flash("Passwords do not match")
             return redirect(url_for('register'))
 
-        username_valid, username_error = is_username_valid(username)
+        username_valid, username_error = services.user_service.is_username_valid(username)
         if not username_valid:
             flash(username_error)
             return redirect(url_for('register'))
 
-        password_valid, password_error = is_password_valid(password)
+        password_valid, password_error = services.user_service.is_password_valid(password)
         if not password_valid:
             flash(password_error)
             return redirect(url_for('register'))
 
         try:
-            register_user(username, password)
+            services.user_service.register_user(username, password)
             flash("Registration successful")
             return redirect(url_for('index'))
         except ValueError as error:
-            flash(str(error))
+            print(f"Error: {str(error)}")
+            flash("An error occurred. Please try again.")
             return redirect(url_for('register'))
 
     return render_template("frontend/register.html")
@@ -127,11 +141,15 @@ def logout():
 
 @app.route("/add_income", methods=["POST"])
 def add_income():
+    if not validate_csrf_token(request.form.get("csrf_token")):
+        flash("Invalid CSRF token")
+        return redirect(url_for('dashboard'))
+    
     source = request.form.get("source")
     amount = float(request.form.get("amount"))
 
     if check_session():
-        user_id = get_user_id_by_username(session["username"])
+        user_id = services.user_service.get_user_id_by_username(session["username"])
         if user_id:
             services.income_service.insert_income(user_id, source, amount)
             flash("Income added successfully")
@@ -146,8 +164,12 @@ def add_income():
     
 @app.route("/delete_last_income", methods=["POST"])
 def delete_last_income():
+    if not validate_csrf_token(request.form.get("csrf_token")):
+        flash("Invalid CSRF token")
+        return redirect(url_for('dashboard'))
+    
     if check_session():
-        user_id = get_user_id_by_username(session["username"])
+        user_id = services.user_service.get_user_id_by_username(session["username"])
         if user_id:
             services.income_service.delete_last_income(user_id)
             flash("Last income transaction deleted successfully")
@@ -163,8 +185,12 @@ def delete_last_income():
 
 @app.route("/delete_all_income", methods=["POST"])
 def delete_all_income():
+    if not validate_csrf_token(request.form.get("csrf_token")):
+        flash("Invalid CSRF token")
+        return redirect(url_for('dashboard'))
+    
     if check_session():
-        user_id = get_user_id_by_username(session["username"])
+        user_id = services.user_service.get_user_id_by_username(session["username"])
         if user_id:
             services.income_service.delete_all_income(user_id)
             flash("All income transactions deleted successfully")
@@ -180,11 +206,15 @@ def delete_all_income():
 
 @app.route("/add_expense", methods=["POST"])
 def add_expense():
+    if not validate_csrf_token(request.form.get("csrf_token")):
+        flash("Invalid CSRF token")
+        return redirect(url_for('dashboard'))
+    
     category = request.form.get("category")
     amount = float(request.form.get("amount"))
 
     if check_session():
-        user_id = get_user_id_by_username(session["username"])
+        user_id = services.user_service.get_user_id_by_username(session["username"])
 
         if user_id:
             services.expense_service.insert_expense(user_id, category, amount)
@@ -201,8 +231,12 @@ def add_expense():
 
 @app.route("/delete_last_expense", methods=["POST"])
 def delete_last_expense():
+    if not validate_csrf_token(request.form.get("csrf_token")):
+        flash("Invalid CSRF token")
+        return redirect(url_for('dashboard'))
+    
     if check_session():
-        user_id = get_user_id_by_username(session["username"])
+        user_id = services.user_service.get_user_id_by_username(session["username"])
         if user_id:
             services.expense_service.delete_last_expense(user_id)
             flash("Last expense transaction deleted successfully")
@@ -218,8 +252,12 @@ def delete_last_expense():
 
 @app.route("/delete_all_expense", methods=["POST"])
 def delete_all_expenses():
+    if not validate_csrf_token(request.form.get("csrf_token")):
+        flash("Invalid CSRF token")
+        return redirect(url_for('dashboard'))
+    
     if check_session():
-        user_id = get_user_id_by_username(session["username"])
+        user_id = services.user_service.get_user_id_by_username(session["username"])
         if user_id:
             services.expense_service.delete_all_expenses(user_id)
             flash("All expense transactions deleted successfully")
@@ -235,11 +273,15 @@ def delete_all_expenses():
 
 @app.route("/add_saving", methods=["POST"])
 def add_saving():
+    if not validate_csrf_token(request.form.get("csrf_token")):
+        flash("Invalid CSRF token")
+        return redirect(url_for('dashboard'))
+    
     category = request.form.get("category")
     amount = float(request.form.get("amount"))
 
     if check_session():
-        user_id = get_user_id_by_username(session["username"])
+        user_id = services.user_service.get_user_id_by_username(session["username"])
 
         if user_id:
             services.saving_service.insert_saving(user_id, category, amount)
@@ -253,8 +295,12 @@ def add_saving():
 
 @app.route("/delete_last_saving", methods=["POST"])
 def delete_last_saving():
+    if not validate_csrf_token(request.form.get("csrf_token")):
+        flash("Invalid CSRF token")
+        return redirect(url_for('dashboard'))
+    
     if check_session():
-        user_id = get_user_id_by_username(session["username"])
+        user_id = services.user_service.get_user_id_by_username(session["username"])
         if user_id:
             services.saving_service.delete_last_saving(user_id)
             flash("Last saving transaction deleted successfully")
@@ -270,8 +316,12 @@ def delete_last_saving():
 
 @app.route("/delete_all_savings", methods=["POST"])
 def delete_all_savings():
+    if not validate_csrf_token(request.form.get("csrf_token")):
+        flash("Invalid CSRF token")
+        return redirect(url_for('dashboard'))
+    
     if check_session():
-        user_id = get_user_id_by_username(session["username"])
+        user_id = services.user_service.get_user_id_by_username(session["username"])
         if user_id:
             services.saving_service.delete_all_savings(user_id)
             flash("All saving transactions deleted successfully")
@@ -287,11 +337,15 @@ def delete_all_savings():
 
 @app.route("/add_budget", methods=["POST"])
 def add_budget():
+    if not validate_csrf_token(request.form.get("csrf_token")):
+        flash("Invalid CSRF token")
+        return redirect(url_for('dashboard'))
+    
     category = request.form.get("category")
     amount = float(request.form.get("amount"))
 
     if check_session():
-        user_id = get_user_id_by_username(session["username"])
+        user_id = services.user_service.get_user_id_by_username(session["username"])
 
         if user_id:
             services.budget_service.insert_budget(user_id, category, amount)
@@ -305,8 +359,12 @@ def add_budget():
 
 @app.route("/delete_last_budget", methods=["POST"])
 def delete_last_budget():
+    if not validate_csrf_token(request.form.get("csrf_token")):
+        flash("Invalid CSRF token")
+        return redirect(url_for('dashboard'))
+    
     if check_session():
-        user_id = get_user_id_by_username(session["username"])
+        user_id = services.user_service.get_user_id_by_username(session["username"])
         if user_id:
             services.budget_service.delete_last_budget(user_id)
             flash("Last budget transaction deleted successfully")
@@ -318,8 +376,12 @@ def delete_last_budget():
     
 @app.route("/delete_all_budgets", methods=["POST"])
 def delete_all_budgets():
+    if not validate_csrf_token(request.form.get("csrf_token")):
+        flash("Invalid CSRF token")
+        return redirect(url_for('dashboard'))
+    
     if check_session():
-        user_id = get_user_id_by_username(session["username"])
+        user_id = services.user_service.get_user_id_by_username(session["username"])
         if user_id:
             services.budget_service.delete_all_budgets(user_id)
             flash("All budget transactions deleted successfully")
@@ -332,13 +394,17 @@ def delete_all_budgets():
 
 @app.route("/add_goal", methods=["POST"])
 def add_goal():
+    if not validate_csrf_token(request.form.get("csrf_token")):
+        flash("Invalid CSRF token")
+        return redirect(url_for('dashboard'))
+    
     goal_name = request.form.get("name")
     category = request.form.get("category")
     goal_amount = float(request.form.get("amount"))
     target_date = request.form.get("date")
 
     if check_session():
-        user_id = get_user_id_by_username(session["username"])
+        user_id = services.user_service.get_user_id_by_username(session["username"])
 
         if user_id:
 
@@ -357,8 +423,12 @@ def add_goal():
     
 @app.route("/delete_last_goal", methods=["POST"])
 def delete_last_goal():
+    if not validate_csrf_token(request.form.get("csrf_token")):
+        flash("Invalid CSRF token")
+        return redirect(url_for('dashboard'))
+    
     if check_session():
-        user_id = get_user_id_by_username(session["username"])
+        user_id = services.user_service.get_user_id_by_username(session["username"])
         if user_id:
             services.goal_service.delete_last_goal(user_id)
             flash("Last goal deleted successfully")
@@ -370,8 +440,12 @@ def delete_last_goal():
 
 @app.route("/delete_all_goals", methods=["POST"])
 def delete_all_goals():
+    if not validate_csrf_token(request.form.get("csrf_token")):
+        flash("Invalid CSRF token")
+        return redirect(url_for('dashboard'))
+    
     if check_session():
-        user_id = get_user_id_by_username(session["username"])
+        user_id = services.user_service.get_user_id_by_username(session["username"])
         if user_id:
             services.goal_service.delete_all_goals(user_id)
             flash("All goals deleted successfully")
@@ -383,8 +457,12 @@ def delete_all_goals():
     
 @app.route("/delete_goal_by_name", methods=["POST"])
 def delete_goal_by_name():
+    if not validate_csrf_token(request.form.get("csrf_token")):
+        flash("Invalid CSRF token")
+        return redirect(url_for('dashboard'))
+    
     if check_session():
-        user_id = get_user_id_by_username(session["username"])
+        user_id = services.user_service.get_user_id_by_username(session["username"])
         if user_id:
             goal_name = request.form.get("name")
             if services.goal_service.delete_goal_by_name(user_id, goal_name):

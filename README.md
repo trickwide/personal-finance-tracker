@@ -87,6 +87,8 @@ flask run
 
   - User can delete their submitted transactions
 
+- Security
+
   - Application has enhanced security with CSRF token validation for all POST requests
 
 ### What needs to be done

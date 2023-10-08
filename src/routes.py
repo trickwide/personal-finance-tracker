@@ -303,6 +303,33 @@ def add_budget():
         return redirect(url_for('index'))
 
 
+@app.route("/delete_last_budget", methods=["POST"])
+def delete_last_budget():
+    if check_session():
+        user_id = get_user_id_by_username(session["username"])
+        if user_id:
+            services.budget_service.delete_last_budget(user_id)
+            flash("Last budget transaction deleted successfully")
+            return redirect(url_for('dashboard'))
+
+    else:
+        flash("Please log in to delete budget transactions")
+        return redirect(url_for('index'))
+    
+@app.route("/delete_all_budgets", methods=["POST"])
+def delete_all_budgets():
+    if check_session():
+        user_id = get_user_id_by_username(session["username"])
+        if user_id:
+            services.budget_service.delete_all_budgets(user_id)
+            flash("All budget transactions deleted successfully")
+            return redirect(url_for('dashboard'))
+
+    else:
+        flash("Please log in to delete budget transactions")
+        return redirect(url_for('index'))
+    
+
 @app.route("/add_goal", methods=["POST"])
 def add_goal():
     goal_name = request.form.get("name")

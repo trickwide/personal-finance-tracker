@@ -10,3 +10,11 @@
   background-color: #4caf50;
   border-radius: 10px;
 }
+
+.button-group {
+  display: flex;
+}
+
+.form-wrapper {
+  margin-right: 10px;
+}

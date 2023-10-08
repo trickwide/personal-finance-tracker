@@ -49,3 +49,29 @@ def is_goal_name_unique(user_id, goal_name):
         sql, {"user_id": user_id, "goal_name": goal_name}).fetchone()
 
     return result is None
+
+def delete_last_goal(user_id):
+    sql = text(
+        "DELETE FROM financial_goals where goal_id = (SELECT goal_id FROM financial_goals WHERE user_id = :user_id ORDER BY date_created DESC LIMIT 1)")
+
+    db.session.execute(sql, {"user_id": user_id})
+
+    db.session.commit()
+    
+def delete_all_goals(user_id):
+    sql = text(
+        "DELETE FROM financial_goals WHERE user_id = :user_id")
+
+    db.session.execute(sql, {"user_id": user_id})
+
+    db.session.commit()
+    
+def delete_goal_by_name(user_id, goal_name):
+    sql = text(
+        "DELETE FROM financial_goals WHERE user_id = :user_id AND goal_name = :goal_name")
+
+    result = db.session.execute(sql, {"user_id": user_id, "goal_name": goal_name})
+
+    db.session.commit()
+    
+    return result.rowcount > 0

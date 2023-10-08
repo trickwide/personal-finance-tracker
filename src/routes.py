@@ -328,7 +328,7 @@ def delete_all_budgets():
     else:
         flash("Please log in to delete budget transactions")
         return redirect(url_for('index'))
-    
+
 
 @app.route("/add_goal", methods=["POST"])
 def add_goal():
@@ -353,4 +353,46 @@ def add_goal():
 
     else:
         flash("Please log in to add financial goal")
+        return redirect(url_for('index'))
+    
+@app.route("/delete_last_goal", methods=["POST"])
+def delete_last_goal():
+    if check_session():
+        user_id = get_user_id_by_username(session["username"])
+        if user_id:
+            services.goal_service.delete_last_goal(user_id)
+            flash("Last goal deleted successfully")
+            return redirect(url_for('dashboard'))
+
+    else:
+        flash("Please log in to delete goals")
+        return redirect(url_for('index'))
+
+@app.route("/delete_all_goals", methods=["POST"])
+def delete_all_goals():
+    if check_session():
+        user_id = get_user_id_by_username(session["username"])
+        if user_id:
+            services.goal_service.delete_all_goals(user_id)
+            flash("All goals deleted successfully")
+            return redirect(url_for('dashboard'))
+
+    else:
+        flash("Please log in to delete goals")
+        return redirect(url_for('index'))
+    
+@app.route("/delete_goal_by_name", methods=["POST"])
+def delete_goal_by_name():
+    if check_session():
+        user_id = get_user_id_by_username(session["username"])
+        if user_id:
+            goal_name = request.form.get("name")
+            if services.goal_service.delete_goal_by_name(user_id, goal_name):
+                flash("Goal deleted successfully")
+            else:
+                flash("Goal not found!")
+            return redirect(url_for('dashboard'))
+
+    else:
+        flash("Please log in to delete goals")
         return redirect(url_for('index'))

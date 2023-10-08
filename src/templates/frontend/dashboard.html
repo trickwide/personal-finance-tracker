@@ -170,7 +170,7 @@
         <input type="submit" value="Add Goal">
     </form>
 
-    <div>
+    <br>
         <table>
             <thead>
                 <tr>
@@ -203,6 +203,20 @@
                     
             </tbody>
         </table>
+        </br>
+        <form method="POST" action="{{ url_for('delete_all_goals') }}" onsubmit="return confirm('Are you sure you want to delete all goals? This action cannot be undone.');">
+            <button type="submit">Delete All Goals</button>
+        </form>
+
+        <form method="POST" action="{{ url_for('delete_last_goal') }}" onsubmit="return confirm('Are you sure you want to delete the last goal? This action cannot be undone.');">
+            <button type="submit">Delete Last Goal</button>
+        </form>
+        <form method="POST" action="{{ url_for('delete_goal_by_name') }}" onsubmit="return confirm('Are you sure you want to delete the goal? This action cannot be undone.');">
+            <label for="goal_name">Goal Name:</label>
+            <input type="text" id="goal_name "name="name" required>
+            <button type="submit">Delete Goal</button>
+        </form>
+        
     </div>
     
     {% set js_flashed_messages = get_flashed_messages()|tojson %}

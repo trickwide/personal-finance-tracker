@@ -41,11 +41,11 @@
     </br>
     <div>
         <form method="POST" action="{{ url_for('delete_all_income') }}" onsubmit="return confirm('Are you sure you want to delete all income transactions? This action cannot be undone.');">
-            <button type="submit" class="btn btn-danger">Delete All Income Transactions</button>
+            <button type="submit">Delete All Income Transactions</button>
         </form>
     
         <form method="POST" action="{{ url_for('delete_last_income') }}" onsubmit="return confirm('Are you sure you want to delete the last income transaction? This action cannot be undone.');">
-            <button type="submit" class="btn btn-warning">Delete Last Income Transaction</button>
+            <button type="submit">Delete Last Income Transaction</button>
         </form>
     </div>
 </br>
@@ -76,11 +76,11 @@
     </br>
     <div>
         <form method="POST" action="{{ url_for('delete_all_expenses') }}" onsubmit="return confirm('Are you sure you want to delete all expense transactions? This action cannot be undone.');">
-            <button type="submit" class="btn btn-danger">Delete All Expense Transactions</button>
+            <button type="submit">Delete All Expense Transactions</button>
         </form>
     
         <form method="POST" action="{{ url_for('delete_last_expense') }}" onsubmit="return confirm('Are you sure you want to delete the last expense transaction? This action cannot be undone.');">
-            <button type="submit" class="btn btn-warning">Delete Last Expense Transaction</button>
+            <button type="submit">Delete Last Expense Transaction</button>
         </form>
     </div>
 </br>
@@ -103,6 +103,16 @@
         <label>Savings Past Week:</label> {{ savings.emergency }}
         <label>Savings Past Month:</label> {{ savings.retirement }}
         <label>Savings Past Year:</label> {{ savings.investment}}
+    </div>
+    </br>
+    <div>
+        <form method="POST" action="{{ url_for('delete_all_savings') }}" onsubmit="return confirm('Are you sure you want to delete all savings transactions? This action cannot be undone.');">
+            <button type="submit">Delete All Savings Transactions</button>
+        </form>
+
+        <form method="POST" action="{{ url_for('delete_last_saving') }}" onsubmit="return confirm('Are you sure you want to delete the last savings transaction? This action cannot be undone.');">
+            <button type="submit">Delete Last Savings Transaction</button>
+        </form>
     </div>
 </br>
     <form action="{{ url_for('add_budget') }}" method="post">

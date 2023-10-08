@@ -15,7 +15,7 @@
     <a href="{{ url_for('index') }}">Log in</a> or 
     <a href="{{ url_for('register') }}">Register</a>
     {% else %}
-    <p>You are logged in as {{ session["username"] }}.</p>
+    <p>You are logged in as {{ session["username"]|e }}.</p>
     <a href="{{ url_for('logout') }}">Logout</a>
 </br>
 </br>
@@ -30,13 +30,13 @@
     </form>
 </br>
     <div>
-        <label>Total Income:</label> {{ income.total }}
+        <label>Total Income:</label> {{ income.total|e }}
     </br>
-        <label>Income Past Week:</label> {{ income.week }}
+        <label>Income Past Week:</label> {{ income.week|e }}
     </br>
-        <label>Income Past Month:</label> {{ income.month }}
+        <label>Income Past Month:</label> {{ income.month|e }}
     </br>
-        <label>Income Past Year:</label> {{ income.year }}
+        <label>Income Past Year:</label> {{ income.year|e }}
     </div>
     </br>
     <div class="button-group">

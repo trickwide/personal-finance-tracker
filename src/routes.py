@@ -214,7 +214,8 @@ def delete_last_expense():
     else:
         flash("Please log in to delete expense transactions")
         return redirect(url_for('index'))
-    
+
+
 @app.route("/delete_all_expense", methods=["POST"])
 def delete_all_expenses():
     if check_session():
@@ -247,6 +248,40 @@ def add_saving():
 
     else:
         flash("Please log in to add saving")
+        return redirect(url_for('index'))
+
+
+@app.route("/delete_last_saving", methods=["POST"])
+def delete_last_saving():
+    if check_session():
+        user_id = get_user_id_by_username(session["username"])
+        if user_id:
+            services.saving_service.delete_last_saving(user_id)
+            flash("Last saving transaction deleted successfully")
+            return redirect(url_for('dashboard'))
+        else:
+            flash("User not found!")
+            return redirect(url_for('index'))
+
+    else:
+        flash("Please log in to delete saving transactions")
+        return redirect(url_for('index'))
+
+
+@app.route("/delete_all_savings", methods=["POST"])
+def delete_all_savings():
+    if check_session():
+        user_id = get_user_id_by_username(session["username"])
+        if user_id:
+            services.saving_service.delete_all_savings(user_id)
+            flash("All saving transactions deleted successfully")
+            return redirect(url_for('dashboard'))
+        else:
+            flash("User not found!")
+            return redirect(url_for('index'))
+
+    else:
+        flash("Please log in to delete saving transactions")
         return redirect(url_for('index'))
 
 
@@ -291,37 +326,4 @@ def add_goal():
 
     else:
         flash("Please log in to add financial goal")
-        return redirect(url_for('index'))
-
-
-@app.route("/delete_last_saving", methods=["POST"])
-def delete_last_saving():
-    if check_session():
-        user_id = get_user_id_by_username(session["username"])
-        if user_id:
-            services.saving_service.delete_last_saving(user_id)
-            flash("Last saving transaction deleted successfully")
-            return redirect(url_for('dashboard'))
-        else:
-            flash("User not found!")
-            return redirect(url_for('index'))
-
-    else:
-        flash("Please log in to delete saving transactions")
-        return redirect(url_for('index'))
-    
-@app.route("/delete_all_savings", methods=["POST"])
-def delete_all_savings():
-    if check_session():
-        user_id = get_user_id_by_username(session["username"])
-        if user_id:
-            services.saving_service.delete_all_savings(user_id)
-            flash("All saving transactions deleted successfully")
-            return redirect(url_for('dashboard'))
-        else:
-            flash("User not found!")
-            return redirect(url_for('index'))
-
-    else:
-        flash("Please log in to delete saving transactions")
         return redirect(url_for('index'))

@@ -44,13 +44,11 @@ def validate_user_credentials(username, password):
 
 
 def register_user(username, password):
-    # Check if username already exists
     sql = text("SELECT username FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username": username}).fetchone()
     if result:
         raise ValueError("Username already exists")
 
-    # Hash the password
     hashed_password = generate_password_hash(password)
 
     sql = text(

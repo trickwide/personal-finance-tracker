@@ -85,16 +85,18 @@ flask run
 
     - Goal name, category, goal amount, current amount, target date and progress are shown on a table. Progress bar fills depending on the currently saved amount.
 
+  - User can delete their submitted transactions
+
+  - Application has enhanced security with CSRF token validation for all POST requests
+
 ### What needs to be done
 
-- Application security needs to be strenghtened
+- Application security needs to be strenghtened (check for XSS vulnerability and review previously implemented CSRF token validations)
 
 - Application doesn't have proper styling and current look doesn't represent the final product
 
-- Code refactoring needs to be done, import statements need to be uniform and repetitive code should not exist
+- Code refactoring needs to be done, import statements need to be uniform and repetitive code should not exist. Current product has plenty of repetitive code.
 
 - Dashboard needs to have chart visualization for the data
 
-- User needs to be able to delete their accounts
-
-- User needs to be able to update, reset or delete their submitted data from dashboard
+- User needs to be able to delete their account and all the data associated with the account.

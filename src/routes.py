@@ -25,6 +25,10 @@ def index():
         flash(
             "You are already logged in. Please log out, if you wish to log in with a different account.")
         return redirect(url_for('dashboard'))
+    
+    if request.method == "GET":
+        session["csrf_token"] = secrets.token_hex(16)
+        return render_template("frontend/index.html")
 
     if request.method == "POST":
         if not validate_csrf_token(request.form.get("csrf_token")):
@@ -39,9 +43,9 @@ def index():
         if not valid:
             flash("Invalid username or password")
             return redirect(url_for('index'))
-
+        
         session["username"] = username
-        session["csrf_token"] = secrets.token_hex(16)
+
         return redirect(url_for('dashboard'))
 
     return render_template("frontend/index.html")
@@ -97,6 +101,10 @@ def register():
     if check_session():
         flash("You are already logged in. Please log out to create a new account.")
         return redirect(url_for('dashboard'))
+    
+    if request.method == "GET":
+        session["csrf_token"] = secrets.token_hex(16)
+        return render_template("frontend/register.html")
 
     if request.method == "POST":
         if not validate_csrf_token(request.form.get("csrf_token")):

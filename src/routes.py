@@ -5,7 +5,7 @@ from sqlalchemy.sql import text
 import secrets
 from db import db
 import services.user_service
-import services.income_service
+from services.income_service import default_income_service
 from services.expense_service import default_expense_service
 import services.saving_service
 from services.budget_service import default_budget_service
@@ -61,10 +61,10 @@ def dashboard():
 
         if user_id:
             income_data = {
-                "total": services.income_service.get_total_income(user_id),
-                "week": services.income_service.get_income_past_week(user_id),
-                "month": services.income_service.get_income_past_month(user_id),
-                "year": services.income_service.get_income_past_year(user_id)
+                "total": default_income_service.get_total_income(user_id),
+                "week": default_income_service.get_income_past_week(user_id),
+                "month": default_income_service.get_income_past_month(user_id),
+                "year": default_income_service.get_income_past_year(user_id)
             }
 
             expense_data = {
@@ -165,7 +165,7 @@ def add_income():
         user_id = services.user_service.get_user_id_by_username(
             session["username"])
         if user_id:
-            services.income_service.insert_income(user_id, source, amount)
+            default_income_service.insert_income(user_id, source, amount)
             flash("Income added successfully")
             return redirect(url_for('dashboard'))
         else:
@@ -187,7 +187,7 @@ def delete_last_income():
         user_id = services.user_service.get_user_id_by_username(
             session["username"])
         if user_id:
-            services.income_service.delete_last_income(user_id)
+            default_income_service.delete_last_income(user_id)
             flash("Last income transaction deleted successfully")
             return redirect(url_for('dashboard'))
         else:
@@ -209,7 +209,7 @@ def delete_all_income():
         user_id = services.user_service.get_user_id_by_username(
             session["username"])
         if user_id:
-            services.income_service.delete_all_income(user_id)
+            default_income_service.delete_all_income(user_id)
             flash("All income transactions deleted successfully")
             return redirect(url_for('dashboard'))
         else:

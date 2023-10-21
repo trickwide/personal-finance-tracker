@@ -1,90 +1,30 @@
-from sqlalchemy.sql import text
-from db import db
-from datetime import datetime, timedelta
+from repositories.income_repository import default_income_repository
 
 
-def insert_income(user_id, source, amount):
-    sql = text(
-        "INSERT INTO incomes (user_id, source, amount) VALUES (:user_id, :source, :amount)")
+class IncomeService:
+    def __init__(self, income_repository=default_income_repository):
+        self.income_repository = income_repository
 
-    db.session.execute(
-        sql, {"user_id": user_id, "source": source, "amount": amount})
+    def insert_income(self, user_id, source, amount):
+        self.default_income_repository.insert_income(user_id, source, amount)
 
-    db.session.commit()
+    def get_total_income(self, user_id):
+        return self.income_repository.get_total_income(user_id)
 
+    def get_income_past_week(self, user_id):
+        return self.income_repository.get_income_past_week(user_id)
 
-def get_total_income(user_id):
-    sql = text(
-        "SELECT SUM(amount) FROM incomes WHERE user_id = :user_id")
+    def get_income_past_month(self, user_id):
+        return self.income_repository.get_income_past_month(user_id)
 
-    result = db.session.execute(
-        sql, {"user_id": user_id}).fetchone()
+    def get_income_past_year(self, user_id):
+        return self.income_repository.get_income_past_year(user_id)
 
-    return result[0] or 0.0
+    def delete_last_income(self, user_id):
+        self.income_repository.delete_last_income(user_id)
 
-
-def get_income_past_week(user_id):
-    one_week_ago = datetime.now() - timedelta(days=7)
-
-    sql = text(
-        "SELECT SUM(amount) FROM incomes WHERE user_id = :user_id AND date_received > :one_week_ago"
-    )
-
-    result = db.session.execute(
-        sql, {"user_id": user_id, "one_week_ago": one_week_ago}).fetchone()
-
-    return result[0] or 0.0
+    def delete_all_income(self, user_id):
+        self.income_repository.delete_all_income(user_id)
 
 
-def get_income_past_month(user_id):
-    one_month_ago = datetime.now() - timedelta(days=30)
-
-    sql = text(
-        "SELECT SUM(amount) FROM incomes WHERE user_id = :user_id AND date_received > :one_month_ago"
-    )
-
-    result = db.session.execute(
-        sql, {"user_id": user_id, "one_month_ago": one_month_ago}).fetchone()
-
-    return result[0] or 0.0
-
-
-def get_income_past_year(user_id):
-    one_year_ago = datetime.now() - timedelta(days=365)
-
-    sql = text(
-        "SELECT SUM(amount) FROM incomes WHERE user_id = :user_id AND date_received > :one_year_ago"
-    )
-
-    result = db.session.execute(
-        sql, {"user_id": user_id, "one_year_ago": one_year_ago}).fetchone()
-
-    return result[0] or 0.0
-
-
-def delete_last_income(user_id):
-    sql = text("""
-               DELETE FROM incomes
-                WHERE income_id = (
-                    SELECT income_id
-                    FROM incomes
-                    WHERE user_id = :user_id
-                    ORDER BY date_received DESC
-                    LIMIT 1
-                    )
-               """
-               )
-
-    db.session.execute(sql, {"user_id": user_id})
-
-    db.session.commit()
-
-
-def delete_all_income(user_id):
-    sql = text(
-        "DELETE FROM incomes WHERE user_id = :user_id"
-    )
-
-    db.session.execute(sql, {"user_id": user_id})
-
-    db.session.commit()
+default_income_service = IncomeService(default_income_repository)

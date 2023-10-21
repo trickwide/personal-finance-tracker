@@ -61,15 +61,25 @@ def get_income_past_year(user_id):
 
     return result[0] or 0.0
 
+
 def delete_last_income(user_id):
-    sql = text(
-        "DELETE FROM incomes WHERE income_id = (SELECT income_id FROM incomes WHERE user_id = :user_id ORDER BY date_received DESC LIMIT 1)"
-        )
+    sql = text("""
+               DELETE FROM incomes
+                WHERE income_id = (
+                    SELECT income_id
+                    FROM incomes
+                    WHERE user_id = :user_id
+                    ORDER BY date_received DESC
+                    LIMIT 1
+                    )
+               """
+               )
 
     db.session.execute(sql, {"user_id": user_id})
 
     db.session.commit()
-    
+
+
 def delete_all_income(user_id):
     sql = text(
         "DELETE FROM incomes WHERE user_id = :user_id"

@@ -51,14 +51,24 @@ def get_investment_savings(user_id):
 
     return result[0] or 0.0
 
+
 def delete_last_saving(user_id):
-    sql = text(
-        "DELETE FROM savings where saving_id = (SELECT saving_id FROM savings WHERE user_id = :user_id ORDER BY date_saved DESC LIMIT 1)")
+    sql = text("""
+               DELETE FROM savings
+                WHERE saving_id = (
+                    SELECT saving_id
+                    FROM savings
+                    WHERE user_id = :user_id
+                    ORDER BY date_saved DESC
+                    LIMIT 1)
+                """
+               )
 
     db.session.execute(sql, {"user_id": user_id})
 
     db.session.commit()
-    
+
+
 def delete_all_savings(user_id):
     sql = text(
         "DELETE FROM savings WHERE user_id = :user_id")

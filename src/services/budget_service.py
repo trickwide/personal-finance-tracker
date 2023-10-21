@@ -51,13 +51,24 @@ def get_lifestyle_misc_budget(user_id):
 
     return result[0] or 0.0
 
+
 def delete_last_budget(user_id):
-    sql = text(
-        "DELETE FROM budgets where budget_id = (SELECT budget_id FROM budgets WHERE user_id = :user_id ORDER BY budget_id DESC LIMIT 1)")
+    sql = text("""
+               DELETE FROM budgets
+               WHERE budget_id = (
+                    SELECT budget_id
+                    FROM budgets
+                    WHERE user_id = :user_id
+                    ORDER BY budget_id DESC
+                    LIMIT 1
+               )
+               """
+               )
 
     db.session.execute(sql, {"user_id": user_id})
 
     db.session.commit()
+
 
 def delete_all_budgets(user_id):
     sql = text(

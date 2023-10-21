@@ -14,8 +14,12 @@ def get_current_amount_for_goal(user_id, category):
 
 
 def get_all_goals_for_user(user_id):
-    sql = text(
-        "SELECT goal_name, category, goal_amount, target_date FROM financial_goals WHERE user_id = :user_id")
+    sql = text("""
+               SELECT goal_name, category, goal_amount, target_date
+               FROM financial_goals
+               WHERE user_id = :user_id
+               """
+               )
 
     result = db.session.execute(sql, {"user_id": user_id}).fetchall()
 
@@ -32,8 +36,13 @@ def get_all_goals_for_user(user_id):
 
 
 def insert_goal(user_id, goal_name, category, goal_amount, target_date):
-    sql = text(
-        "INSERT INTO financial_goals (user_id, goal_name, category, goal_amount, target_date) VALUES (:user_id, :goal_name, :category, :goal_amount, :target_date)")
+    sql = text("""
+               INSERT INTO financial_goals
+                (user_id, goal_name, category, goal_amount, target_date)
+                VALUES
+                 (:user_id, :goal_name, :category, :goal_amount, :target_date)
+                """
+               )
 
     db.session.execute(sql, {"user_id": user_id, "goal_name": goal_name, "category": category,
                        "goal_amount": goal_amount, "target_date": target_date})
@@ -50,14 +59,24 @@ def is_goal_name_unique(user_id, goal_name):
 
     return result is None
 
+
 def delete_last_goal(user_id):
-    sql = text(
-        "DELETE FROM financial_goals where goal_id = (SELECT goal_id FROM financial_goals WHERE user_id = :user_id ORDER BY date_created DESC LIMIT 1)")
+    sql = text("""
+               DELETE FROM financial_goals
+               WHERE goal_id = (
+                    SELECT goal_id
+                    FROM financial_goals
+                    WHERE user_id = :user_id
+                    ORDER BY date_created DESC
+                    LIMIT 1)
+               """
+               )
 
     db.session.execute(sql, {"user_id": user_id})
 
     db.session.commit()
-    
+
+
 def delete_all_goals(user_id):
     sql = text(
         "DELETE FROM financial_goals WHERE user_id = :user_id")
@@ -65,13 +84,15 @@ def delete_all_goals(user_id):
     db.session.execute(sql, {"user_id": user_id})
 
     db.session.commit()
-    
+
+
 def delete_goal_by_name(user_id, goal_name):
     sql = text(
         "DELETE FROM financial_goals WHERE user_id = :user_id AND goal_name = :goal_name")
 
-    result = db.session.execute(sql, {"user_id": user_id, "goal_name": goal_name})
+    result = db.session.execute(
+        sql, {"user_id": user_id, "goal_name": goal_name})
 
     db.session.commit()
-    
+
     return result.rowcount > 0

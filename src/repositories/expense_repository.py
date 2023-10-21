@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 
 class ExpenseRepository:
-    def insert_expense(user_id, category, amount):
+    def insert_expense(self, user_id, category, amount):
         sql = text(
             "INSERT INTO expenses (user_id, category, amount) VALUES (:user_id, :category, :amount)")
 
@@ -13,7 +13,7 @@ class ExpenseRepository:
 
         db.session.commit()
 
-    def get_total_expense(user_id):
+    def get_total_expense(self, user_id):
         sql = text(
             "SELECT SUM(amount) FROM expenses WHERE user_id = :user_id")
 
@@ -22,7 +22,7 @@ class ExpenseRepository:
 
         return result[0] or 0.0
 
-    def get_expense_past_week(user_id):
+    def get_expense_past_week(self, user_id):
         one_week_ago = datetime.now() - timedelta(days=7)
 
         sql = text(
@@ -34,7 +34,7 @@ class ExpenseRepository:
 
         return result[0] or 0.0
 
-    def get_expense_past_month(user_id):
+    def get_expense_past_month(self, user_id):
         one_month_ago = datetime.now() - timedelta(days=30)
 
         sql = text(
@@ -46,7 +46,7 @@ class ExpenseRepository:
 
         return result[0] or 0.0
 
-    def get_expense_past_year(user_id):
+    def get_expense_past_year(self, user_id):
         one_year_ago = datetime.now() - timedelta(days=365)
 
         sql = text(
@@ -58,7 +58,7 @@ class ExpenseRepository:
 
         return result[0] or 0.0
 
-    def delete_last_expense(user_id):
+    def delete_last_expense(self, user_id):
         sql = text("""
                 DELETE FROM expenses
                 WHERE expense_id = (
@@ -76,7 +76,7 @@ class ExpenseRepository:
 
         db.session.commit()
 
-    def delete_all_expenses(user_id):
+    def delete_all_expenses(self, user_id):
         sql = text(
             "DELETE FROM expenses WHERE user_id = :user_id"
         )
@@ -85,3 +85,6 @@ class ExpenseRepository:
             sql, {"user_id": user_id})
 
         db.session.commit()
+
+
+default_expense_repository = ExpenseRepository()

@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 import secrets
 from db import db
-import services.user_service
+from services.user_service import default_user_service
 from services.income_service import default_income_service
 from services.expense_service import default_expense_service
 from services.saving_service import default_saving_service
@@ -39,7 +39,7 @@ def index():
         username = request.form.get("username")
         password = request.form.get("password")
 
-        valid = services.user_service.validate_user_credentials(
+        valid = default_user_service.validate_user_credentials(
             username, password)
 
         if not valid:
@@ -56,7 +56,7 @@ def index():
 @app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
     if check_session():
-        user_id = services.user_service.get_user_id_by_username(
+        user_id = default_user_service.get_user_id_by_username(
             session["username"])
 
         if user_id:
@@ -122,20 +122,20 @@ def register():
             flash("Passwords do not match")
             return redirect(url_for('register'))
 
-        username_valid, username_error = services.user_service.is_username_valid(
+        username_valid, username_error = default_user_service.is_username_valid(
             username)
         if not username_valid:
             flash(username_error)
             return redirect(url_for('register'))
 
-        password_valid, password_error = services.user_service.is_password_valid(
+        password_valid, password_error = default_user_service.is_password_valid(
             password)
         if not password_valid:
             flash(password_error)
             return redirect(url_for('register'))
 
         try:
-            services.user_service.register_user(username, password)
+            default_user_service.register_user(username, password)
             flash("Registration successful")
             return redirect(url_for('index'))
         except ValueError as error:
@@ -162,7 +162,7 @@ def add_income():
     amount = float(request.form.get("amount"))
 
     if check_session():
-        user_id = services.user_service.get_user_id_by_username(
+        user_id = default_user_service.get_user_id_by_username(
             session["username"])
         if user_id:
             default_income_service.insert_income(user_id, source, amount)
@@ -184,7 +184,7 @@ def delete_last_income():
         return redirect(url_for('dashboard'))
 
     if check_session():
-        user_id = services.user_service.get_user_id_by_username(
+        user_id = default_user_service.get_user_id_by_username(
             session["username"])
         if user_id:
             default_income_service.delete_last_income(user_id)
@@ -206,7 +206,7 @@ def delete_all_income():
         return redirect(url_for('dashboard'))
 
     if check_session():
-        user_id = services.user_service.get_user_id_by_username(
+        user_id = default_user_service.get_user_id_by_username(
             session["username"])
         if user_id:
             default_income_service.delete_all_income(user_id)
@@ -231,7 +231,7 @@ def add_expense():
     amount = float(request.form.get("amount"))
 
     if check_session():
-        user_id = services.user_service.get_user_id_by_username(
+        user_id = default_user_service.get_user_id_by_username(
             session["username"])
 
         if user_id:
@@ -254,7 +254,7 @@ def delete_last_expense():
         return redirect(url_for('dashboard'))
 
     if check_session():
-        user_id = services.user_service.get_user_id_by_username(
+        user_id = default_user_service.get_user_id_by_username(
             session["username"])
         if user_id:
             default_expense_service.delete_last_expense(user_id)
@@ -276,7 +276,7 @@ def delete_all_expenses():
         return redirect(url_for('dashboard'))
 
     if check_session():
-        user_id = services.user_service.get_user_id_by_username(
+        user_id = default_user_service.get_user_id_by_username(
             session["username"])
         if user_id:
             default_expense_service.delete_all_expenses(user_id)
@@ -301,7 +301,7 @@ def add_saving():
     amount = float(request.form.get("amount"))
 
     if check_session():
-        user_id = services.user_service.get_user_id_by_username(
+        user_id = default_user_service.get_user_id_by_username(
             session["username"])
 
         if user_id:
@@ -321,7 +321,7 @@ def delete_last_saving():
         return redirect(url_for('dashboard'))
 
     if check_session():
-        user_id = services.user_service.get_user_id_by_username(
+        user_id = default_user_service.get_user_id_by_username(
             session["username"])
         if user_id:
             default_saving_service.delete_last_saving(user_id)
@@ -343,7 +343,7 @@ def delete_all_savings():
         return redirect(url_for('dashboard'))
 
     if check_session():
-        user_id = services.user_service.get_user_id_by_username(
+        user_id = default_user_service.get_user_id_by_username(
             session["username"])
         if user_id:
             default_saving_service.delete_all_savings(user_id)
@@ -368,7 +368,7 @@ def add_budget():
     amount = float(request.form.get("amount"))
 
     if check_session():
-        user_id = services.user_service.get_user_id_by_username(
+        user_id = default_user_service.get_user_id_by_username(
             session["username"])
 
         if user_id:
@@ -388,7 +388,7 @@ def delete_last_budget():
         return redirect(url_for('dashboard'))
 
     if check_session():
-        user_id = services.user_service.get_user_id_by_username(
+        user_id = default_user_service.get_user_id_by_username(
             session["username"])
         if user_id:
             default_budget_service.delete_last_budget(user_id)
@@ -407,7 +407,7 @@ def delete_all_budgets():
         return redirect(url_for('dashboard'))
 
     if check_session():
-        user_id = services.user_service.get_user_id_by_username(
+        user_id = default_user_service.get_user_id_by_username(
             session["username"])
         if user_id:
             default_budget_service.delete_all_budgets(user_id)
@@ -431,7 +431,7 @@ def add_goal():
     target_date = request.form.get("date")
 
     if check_session():
-        user_id = services.user_service.get_user_id_by_username(
+        user_id = default_user_service.get_user_id_by_username(
             session["username"])
 
         if user_id:
@@ -457,7 +457,7 @@ def delete_last_goal():
         return redirect(url_for('dashboard'))
 
     if check_session():
-        user_id = services.user_service.get_user_id_by_username(
+        user_id = default_user_service.get_user_id_by_username(
             session["username"])
         if user_id:
             default_goal_service.delete_last_goal(user_id)
@@ -476,7 +476,7 @@ def delete_all_goals():
         return redirect(url_for('dashboard'))
 
     if check_session():
-        user_id = services.user_service.get_user_id_by_username(
+        user_id = default_user_service.get_user_id_by_username(
             session["username"])
         if user_id:
             default_goal_service.delete_all_goals(user_id)
@@ -495,7 +495,7 @@ def delete_goal_by_name():
         return redirect(url_for('dashboard'))
 
     if check_session():
-        user_id = services.user_service.get_user_id_by_username(
+        user_id = default_user_service.get_user_id_by_username(
             session["username"])
         if user_id:
             goal_name = request.form.get("name")

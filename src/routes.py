@@ -7,7 +7,7 @@ from db import db
 import services.user_service
 from services.income_service import default_income_service
 from services.expense_service import default_expense_service
-import services.saving_service
+from services.saving_service import default_saving_service
 from services.budget_service import default_budget_service
 from services.goal_service import default_goal_service
 
@@ -78,10 +78,10 @@ def dashboard():
             }
 
             savings_data = {
-                "total": services.saving_service.total_savings(user_id),
-                "emergency": services.saving_service.get_emergency_savings(user_id),
-                "retirement": services.saving_service.get_retirement_savings(user_id),
-                "investment": services.saving_service.get_investment_savings(user_id)
+                "total": default_saving_service.total_savings(user_id),
+                "emergency": default_saving_service.get_emergency_savings(user_id),
+                "retirement": default_saving_service.get_retirement_savings(user_id),
+                "investment": default_saving_service.get_investment_savings(user_id)
             }
 
             budget_data = {
@@ -305,7 +305,7 @@ def add_saving():
             session["username"])
 
         if user_id:
-            services.saving_service.insert_saving(user_id, category, amount)
+            default_saving_service.insert_saving(user_id, category, amount)
             flash("Saving added successfully")
             return redirect(url_for('dashboard'))
 
@@ -324,7 +324,7 @@ def delete_last_saving():
         user_id = services.user_service.get_user_id_by_username(
             session["username"])
         if user_id:
-            services.saving_service.delete_last_saving(user_id)
+            default_saving_service.delete_last_saving(user_id)
             flash("Last saving transaction deleted successfully")
             return redirect(url_for('dashboard'))
         else:
@@ -346,7 +346,7 @@ def delete_all_savings():
         user_id = services.user_service.get_user_id_by_username(
             session["username"])
         if user_id:
-            services.saving_service.delete_all_savings(user_id)
+            default_saving_service.delete_all_savings(user_id)
             flash("All saving transactions deleted successfully")
             return redirect(url_for('dashboard'))
         else:

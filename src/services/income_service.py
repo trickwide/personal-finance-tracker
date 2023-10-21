@@ -6,7 +6,7 @@ class IncomeService:
         self.income_repository = income_repository
 
     def insert_income(self, user_id, source, amount):
-        self.default_income_repository.insert_income(user_id, source, amount)
+        self.income_repository.insert_income(user_id, source, amount)
 
     def get_total_income(self, user_id):
         return self.income_repository.get_total_income(user_id)

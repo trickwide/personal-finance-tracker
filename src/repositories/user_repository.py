@@ -32,5 +32,10 @@ class UserRepository:
         result = db.session.execute(sql, {"username": username}).fetchone()
         return result.user_id if result else None
 
+    def delete_user(self, user_id):
+        sql = text("DELETE FROM users WHERE user_id=:user_id")
+        db.session.execute(sql, {"user_id": user_id})
+        db.session.commit()
+
 
 default_user_repository = UserRepository()

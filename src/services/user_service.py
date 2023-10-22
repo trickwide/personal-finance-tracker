@@ -42,5 +42,8 @@ class UserService:
     def get_user_id_by_username(self, username):
         return self.user_repository.get_user_id_by_username(username)
 
+    def delete_user(self, user_id):
+        self.user_repository.delete_user(user_id)
+
 
 default_user_service = UserService(default_user_repository)

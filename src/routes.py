@@ -52,6 +52,11 @@ def index():
 
 @app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
+    url_data = {
+        'dashboard_url': url_for('dashboard'),
+        'current_path': request.path
+    }
+
     if check_session():
         user_id = default_user_service.get_user_id_by_username(
             session["username"])
@@ -91,13 +96,11 @@ def dashboard():
             financial_goals = default_goal_service.get_all_goals_for_user(
                 user_id)
 
-            url_data = {
-                'dashboard_url': url_for('dashboard'),
-                'current_path': request.path
-            }
-
             return render_template("frontend/dashboard.html", income=income_data, expense=expense_data,
                                    savings=savings_data, budget=budget_data, goals=financial_goals, url_data=url_data)
+    else:
+        flash("Please log in to view your dashboard")
+        return redirect(url_for('index'))
 
     return render_template("frontend/dashboard.html")
 
@@ -510,4 +513,24 @@ def delete_goal_by_name():
 
     else:
         flash("Please log in to delete goals")
+        return redirect(url_for('index'))
+
+
+@app.route("/delete_account", methods=["POST"])
+def delete_account():
+    if not validate_csrf_token(request.form.get("csrf_token")):
+        flash("Invalid CSRF token")
+        return redirect(url_for('index'))
+
+    if check_session():
+        user_id = default_user_service.get_user_id_by_username(
+            session["username"])
+        if user_id:
+            default_user_service.delete_user(user_id)
+            session.clear()
+            flash("Account deleted successfully")
+            return redirect(url_for('index'))
+
+    else:
+        flash("Please log in to delete account")
         return redirect(url_for('index'))

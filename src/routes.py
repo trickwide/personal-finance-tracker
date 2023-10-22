@@ -1,9 +1,6 @@
 from app import app
-from flask import Flask, render_template, redirect, request, flash, session, url_for
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.sql import text
+from flask import render_template, redirect, request, flash, session, url_for
 import secrets
-from db import db
 from services.user_service import default_user_service
 from services.income_service import default_income_service
 from services.expense_service import default_expense_service
@@ -99,7 +96,8 @@ def dashboard():
                 'current_path': request.path
             }
 
-            return render_template("frontend/dashboard.html", income=income_data, expense=expense_data, savings=savings_data, budget=budget_data, goals=financial_goals, url_data=url_data)
+            return render_template("frontend/dashboard.html", income=income_data, expense=expense_data,
+                                   savings=savings_data, budget=budget_data, goals=financial_goals, url_data=url_data)
 
     return render_template("frontend/dashboard.html")
 

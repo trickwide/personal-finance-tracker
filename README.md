@@ -1,8 +1,8 @@
 # Personal finance tracker
 
-Project repository for University of Helsinki's course Tietokannat ja web-ohjelmointi.
+## Summary
 
-This README is a WIP and is subject to change as the project evolves.
+**Personal finance tracker** is a simple web application where users can input their income, expense, saving, budget and saving goal related data.
 
 ## How to run the application
 
@@ -17,7 +17,13 @@ Activate the virtual environment and install the necessary dependencies:
 
 ```
 python3 -m venv venv
+```
+
+```
 source venv/bin/activate
+```
+
+```
 pip install -r ./requirements.txt
 ```
 
@@ -31,17 +37,13 @@ Move to src -folder and start the application:
 
 ```
 cd src
+```
+
+```
 flask run
 ```
 
 ## Features
-
-- Personal finance tracker allows users to input income, expenses, and savings. The software provides visualization tools to display financial data over time, such as expense trends and savings goals.
-
-- Users can create a unique user ID and use it to log in to the system
-- Users can delete their user ID and delete all data that is behind the user ID
-
-## Current situation of project
 
 - Main page / Login page
 
@@ -63,7 +65,9 @@ flask run
 
   - Dashboard displays the currently logged in user.
 
-  - Dashboard has a functional logout button.
+  - User can log out from their current session.
+
+  - User can delete their account and all the related data with `Delete account` -button
 
   - User can submit income information: source of income and amount of income.
 
@@ -85,20 +89,20 @@ flask run
 
     - Goal name, category, goal amount, current amount, target date and progress are shown on a table. Progress bar fills depending on the currently saved amount.
 
-  - User can delete their submitted transactions
+  - User can delete their submitted transactions.
 
 - Security
 
   - Application has enhanced security with CSRF token validation for all POST requests
 
-### What needs to be done
+### What could be done in future, if the project is continued
 
-- Application security needs to be strenghtened (check for XSS vulnerability and review previously implemented CSRF token validations)
+- Overhaul the application styling to be more visually appealing.
 
-- Application doesn't have proper styling and current look doesn't represent the final product
+- Users could search for individual incomes and expenses and see the related data.
 
-- Code refactoring needs to be done, import statements need to be uniform and repetitive code should not exist. Current product has plenty of repetitive code.
+- Add charts to display data changes over time.
 
-- Dashboard needs to have chart visualization for the data
+- Users could download a .csv file with their financial data.
 
-- User needs to be able to delete their account and all the data associated with the account.
+- Refactor underlying code

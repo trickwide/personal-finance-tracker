@@ -16,8 +16,6 @@
     <a href="{{ url_for('register') }}">Register</a>
     {% else %}
     <p>You are logged in as {{ session["username"]|e }}.</p>
-    <a href="{{ url_for('logout') }}">Logout</a>
-</br>
 </br>
     <form action="{{ url_for('add_income') }}" method="post">
         <label for="source">Income Source:</label>

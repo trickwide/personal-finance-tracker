@@ -94,7 +94,12 @@ def dashboard():
             financial_goals = default_goal_service.get_all_goals_for_user(
                 user_id)
 
-            return render_template("frontend/dashboard.html", income=income_data, expense=expense_data, savings=savings_data, budget=budget_data, goals=financial_goals)
+            url_data = {
+                'dashboard_url': url_for('dashboard'),
+                'current_path': request.path
+            }
+
+            return render_template("frontend/dashboard.html", income=income_data, expense=expense_data, savings=savings_data, budget=budget_data, goals=financial_goals, url_data=url_data)
 
     return render_template("frontend/dashboard.html")
 

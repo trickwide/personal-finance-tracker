@@ -10,9 +10,12 @@
 <body>
 <nav>
     <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="dashboard">Dashboard</a></li>
-        <li><a href="/register">Register</a></li>
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+        <li><a href="{{ url_for('register') }}">Register</a></li>
+        {% if 'username' in session and request.path == url_data.dashboard_url %}
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        {% endif %}
     </ul>
 </nav>
 

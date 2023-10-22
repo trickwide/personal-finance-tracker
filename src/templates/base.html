@@ -11,10 +11,9 @@
 <nav>
     <ul>
         {% if 'username' not in session %}
-        <li><a href="{{ url_for('index') }}">Home</a></li>
-        {% endif %}
-        <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+        <li><a href="{{ url_for('index') }}">Log in</a></li>
         <li><a href="{{ url_for('register') }}">Register</a></li>
+        {% endif %}
         {% if 'username' in session and request.path == url_data.dashboard_url %}
             <li><a href="{{ url_for('logout') }}">Logout</a></li>
         {% endif %}

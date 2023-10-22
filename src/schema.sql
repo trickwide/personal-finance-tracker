@@ -7,7 +7,7 @@ CREATE TABLE users (
 
 CREATE TABLE incomes (
     income_id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(user_id),
+    user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
     source VARCHAR(255) NOT NULL,
     amount DECIMAL(10,2) NOT NULL,
     date_received TIMESTAMP NOT NULL DEFAULT NOW()
@@ -15,7 +15,7 @@ CREATE TABLE incomes (
 
 CREATE TABLE expenses (
     expense_id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(user_id),
+    user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
     category VARCHAR(255) NOT NULL,
     amount DECIMAL(10,2) NOT NULL,
     date_incurred TIMESTAMP NOT NULL DEFAULT NOW()
@@ -23,7 +23,7 @@ CREATE TABLE expenses (
 
 CREATE TABLE savings (
     saving_id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(user_id),
+    user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
     category VARCHAR(255) NOT NULL,
     amount DECIMAL(10,2) NOT NULL,
     date_saved TIMESTAMP NOT NULL DEFAULT NOW()
@@ -31,14 +31,14 @@ CREATE TABLE savings (
 
 CREATE TABLE budgets (
     budget_id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(user_id),
+    user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
     category VARCHAR(255) NOT NULL,
     amount DECIMAL(10,2) NOT NULL
 );
 
 CREATE TABLE financial_goals (
     goal_id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(user_id),
+    user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
     goal_name VARCHAR(255) NOT NULL UNIQUE,
     category VARCHAR(255) NOT NULL,
     goal_amount DECIMAL(10,2) NOT NULL,

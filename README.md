@@ -93,7 +93,7 @@ flask run
 
 - Security
 
-  - Application has enhanced security with CSRF token validation for all POST requests
+  - Application has enhanced security with CSRF token validation for all POST requests, measures against SQL injection and XSS vulnerabilities have been implemented.
 
 ### What could be done in future, if the project is continued
 

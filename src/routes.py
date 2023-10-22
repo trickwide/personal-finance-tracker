@@ -102,8 +102,6 @@ def dashboard():
         flash("Please log in to view your dashboard")
         return redirect(url_for('index'))
 
-    return render_template("frontend/dashboard.html")
-
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
